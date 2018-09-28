@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 导入头文件 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context.xsd
+	    http://www.springframework.org/schema/aop
+    	http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 配置数据源 application-dao.xml > dataSource -->
+	<!-- 流程引擎的配置 activiti-6.0.0\wars\activiti-rest\WEB-INF\classes activiti-custom-context -->
+	<bean id="processEngineConfiguration"
+		class="org.activiti.spring.SpringProcessEngineConfiguration">
+		<!-- 数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 事务监听器 -->
+		<property name="transactionManager" ref="transactionManager" />
+		<!-- 数据表的生策略 -->
+		<property name="databaseSchemaUpdate" value="true" />
+	</bean>
+
+	<!-- 流程引擎 -->
+	<bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+		<property name="processEngineConfiguration" ref="processEngineConfiguration" />
+	</bean>
+	<!-- 目地是得到XXXXXService -->
+	<bean id="repositoryService" factory-bean="processEngine"
+		factory-method="getRepositoryService" />
+	<bean id="runtimeService" factory-bean="processEngine"
+		factory-method="getRuntimeService" />
+	<bean id="taskService" factory-bean="processEngine"
+		factory-method="getTaskService" />
+	<bean id="formService" factory-bean="processEngine"
+		factory-method="getFormService" />
+	<bean id="historyService" factory-bean="processEngine"
+		factory-method="getHistoryService" />
+	<bean id="managementService" factory-bean="processEngine"
+		factory-method="getManagementService" />
+	<bean id="identityService" factory-bean="processEngine"
+		factory-method="getIdentityService" />
+
+</beans>
+        
